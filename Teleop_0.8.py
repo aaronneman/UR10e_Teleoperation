@@ -423,7 +423,7 @@ def run_real_mode_control_loop(
             #logging.info(f"robot_quat_final (axis-angle): \t{(robot_rx, robot_ry, robot_rz)}")
 
             # --- Compose and smooth full pose ---
-            current_robot_pose = np.array([robot_x, robot_y, robot_z, home_pose[3], home_pose[4], home_pose[5]]) #-robot_rx, -robot_ry, -robot_rz])
+            current_robot_pose = np.array([robot_x, robot_y, robot_z, -robot_rx, -robot_ry, -robot_rz])
             prev_pose_array = np.array(previous_robot_pose)
             smoothed_pose = prev_pose_array * smoothing_factor + current_robot_pose * (1 - smoothing_factor)
             smoothed_pose = smoothed_pose.tolist()
