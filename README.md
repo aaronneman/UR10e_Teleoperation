@@ -84,6 +84,3 @@ Optional 3D visualization showing:
 - Robot position
 - Tracker position
 - Workspace limits
-
-## License
-[MIT License](LICENSE)
