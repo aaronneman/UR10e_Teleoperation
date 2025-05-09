@@ -345,8 +345,7 @@ def run_real_mode_control_loop(
             current_pos_array = np.array(current_position)
             initial_pos_array = np.array(initial_position)
             delta_pos_vr = current_pos_array - initial_pos_array
-
-            # TODO: Update to match your position mapping.
+          
             position_transform = ([
                     [1, 0, 0],
                     [0, 0, -1],
@@ -362,8 +361,6 @@ def run_real_mode_control_loop(
             # --- Compute delta orientation in VR frame ---
             initial_inv = quaternion_inverse(initial_orientation_norm)
             delta_orientation = quaternion_multiply(initial_inv, current_orientation_norm)
-            #logging.info(f"initial_inv (axis-angle): \t\t{quaternion_to_axis_angle_vec(initial_inv)}")
-            #logging.info(f"delta_orientation (axis-angle): \t{quaternion_to_axis_angle_vec(delta_orientation)}")
 
             # --- Detect dominant axis of rotation ---
             # Convert delta orientation to axis-angle to analyze rotation axis
@@ -383,7 +380,6 @@ def run_real_mode_control_loop(
                 # For X and Y axes, apply alignment first, then delta (better for Y-axis)
                 aligned_delta = apply_rotation_matrix_to_quaternion(delta_orientation, alignment_rotmat)
                 robot_quat = quaternion_multiply(home_quat, aligned_delta)
-            #logging.info(f"robot_quat_pre_filter (axis-angle): \t{quaternion_to_axis_angle_vec(robot_quat)}")
 
             # --- Filter jitter in quaternion space ---
             if prev_robot_quat is None:
@@ -420,14 +416,12 @@ def run_real_mode_control_loop(
             
             # Use continuous rotation for robot control
             robot_rx, robot_ry, robot_rz = continuous_rotation.tolist()
-            #logging.info(f"robot_quat_final (axis-angle): \t{(robot_rx, robot_ry, robot_rz)}")
 
             # --- Compose and smooth full pose ---
             current_robot_pose = np.array([robot_x, robot_y, robot_z, -robot_rx, -robot_ry, -robot_rz])
             prev_pose_array = np.array(previous_robot_pose)
             smoothed_pose = prev_pose_array * smoothing_factor + current_robot_pose * (1 - smoothing_factor)
             smoothed_pose = smoothed_pose.tolist()
-            #logging.info(f"Current robot pose (final): \t{smoothed_pose[3:]}")
 
             # --- Send to robot & update state ---
             robot_controller.send_move_command(*smoothed_pose)
