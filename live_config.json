@@ -1,0 +1,10 @@
+{
+    "robot_ip": "192.168.1.226",
+    "secondary_port": 30003,
+    "home_pose": [-0.165, 0.705, 0.425, 0.022, 2.265, 2.181],
+    "scaling_factor": 0.8,
+    "refresh_rate": 325.0,
+    "smoothing_factor": 0.20,
+    "simulation_mode": false,
+    "visualization": false
+}
